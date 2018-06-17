@@ -1,0 +1,131 @@
+$date
+	Sun Jun 17 12:30:29 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module AddRoundKey $end
+$var wire 128 ! in [127:0] $end
+$var wire 128 " out [127:0] $end
+$var wire 128 # state [127:0] $end
+$upscope $end
+$scope module ShiftRows $end
+$var wire 128 $ state [127:0] $end
+$var wire 128 % nstate [127:0] $end
+$upscope $end
+$scope module SubBytes $end
+$var wire 128 & state [127:0] $end
+$var reg 8 ' address [7:0] $end
+$var reg 128 ( nstate [127:0] $end
+$var integer 32 ) i [31:0] $end
+$upscope $end
+$scope module aes_cipher $end
+$var wire 1 * cipher_text $end
+$var wire 1 + clk $end
+$var wire 1 , key $end
+$var wire 1 - plain_text $end
+$var wire 1 . rstn $end
+$var wire 128 / nstate [127:0] $end
+$var reg 128 0 state [127:0] $end
+$scope module mix $end
+$var wire 128 1 state [127:0] $end
+$var wire 128 2 nstate [127:0] $end
+$scope begin column[0] $end
+$var wire 8 3 s0 [7:0] $end
+$var wire 8 4 s0_ [7:0] $end
+$var wire 8 5 s1 [7:0] $end
+$var wire 8 6 s1_ [7:0] $end
+$var wire 8 7 s2 [7:0] $end
+$var wire 8 8 s2_ [7:0] $end
+$var wire 8 9 s3 [7:0] $end
+$var wire 8 : s3_ [7:0] $end
+$upscope $end
+$scope begin column[4] $end
+$var wire 8 ; s0 [7:0] $end
+$var wire 8 < s0_ [7:0] $end
+$var wire 8 = s1 [7:0] $end
+$var wire 8 > s1_ [7:0] $end
+$var wire 8 ? s2 [7:0] $end
+$var wire 8 @ s2_ [7:0] $end
+$var wire 8 A s3 [7:0] $end
+$var wire 8 B s3_ [7:0] $end
+$upscope $end
+$scope begin column[8] $end
+$var wire 8 C s0 [7:0] $end
+$var wire 8 D s0_ [7:0] $end
+$var wire 8 E s1 [7:0] $end
+$var wire 8 F s1_ [7:0] $end
+$var wire 8 G s2 [7:0] $end
+$var wire 8 H s2_ [7:0] $end
+$var wire 8 I s3 [7:0] $end
+$var wire 8 J s3_ [7:0] $end
+$upscope $end
+$scope begin column[12] $end
+$var wire 8 K s0 [7:0] $end
+$var wire 8 L s0_ [7:0] $end
+$var wire 8 M s1 [7:0] $end
+$var wire 8 N s1_ [7:0] $end
+$var wire 8 O s2 [7:0] $end
+$var wire 8 P s2_ [7:0] $end
+$var wire 8 Q s3 [7:0] $end
+$var wire 8 R s3_ [7:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1 R
+b1 Q
+b1 P
+b1 O
+b1 N
+b1 M
+b1 L
+b1 K
+b1 J
+b1 I
+b1 H
+b1 G
+b1 F
+b1 E
+b1 D
+b1 C
+b1 B
+b1 A
+b1 @
+b1 ?
+b1 >
+b1 =
+b1 <
+b1 ;
+b1 :
+b1 9
+b1 8
+b1 7
+b1 6
+b1 5
+b1 4
+b1 3
+b1000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001 2
+b1000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001 1
+b1000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001 0
+b1000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001 /
+z.
+z-
+z,
+z+
+z*
+b10000 )
+b0 (
+bz '
+bz &
+bz %
+bz $
+bz #
+bx "
+bz !
+$end
