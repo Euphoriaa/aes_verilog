@@ -1,61 +1,70 @@
-// David Peled 208576025
-// Tal Levy 209005305
+//David Peled 208576025
+//Tal Levy 209005305
+
 `include "AddRoundKey.v"
 `include "SubBytes.v"
 `include "ShiftRows.v"
 `include "MixColumns.v"
-module aes_cipher (input clk, input rstn, input plain_text, input key, output cipher_text);
+`include "KeyExpansion.v"
 
+module aes_cipher #(parameter NB = 128, NC = 4, NK = 4, NR = 10, BYTE = 8, WORD = 32) 
+                 (input clk, rstn, start, output reg done,
+                  input [NB-1:0] plain_text, key,
+                  output [NB-1:0] cipher_text);
+                                              //state <= addround key out
+  //ACTUAL REGISTERS
+  reg [NB-1:0] state, roundkey;
   reg [3:0] round;
-  reg [127:0] state;
-  reg [127:0] key_;
-
-  reg [127:0] addroundkeyINPUT;
-  wire [127:0] addroundkeyOUTPUT;
+  //Mux output into addroundkey
+  reg [NB-1:0] addroundkeyIN;
+  wire [NB-1:0] subbytes_, shiftrows_, mixcolumns_, addroundkey_, keyexpansion_;
   
-  wire [127:0] subbytesINPUT;
-  assign subbytesINPUT = state;
-  wire [127:0] subbytesOUTPUT;
-  
-  wire [127:0] shiftrowsINPUT;
-  assign shiftrowsINPUT = subbytesOUTPUT;
-  wire [127:0] shiftrowsOUTPUT;
-  
-  wire [127:0] mixcolumnsINPUT;
-  assign mixcolumnsINPUT = shiftrowsOUTPUT;
-  wire [127:0] mixcolumnsOUTPUT;
+  SubBytes sbox(.in(state),.out(subbytes_));
+  ShiftRows shiftrows(.in(subbytes_),.out(shiftrows_));
+  MixColumns mixcolumns(.in(shiftrows_),.out(mixcolumns_));
+  AddRoundKey addroundkey(.in(addroundkeyIN),.key(roundkey),.out(addroundkey_));
+  KeyExpansion keyexpansion(.RoundNumber(round),.RoundKey(roundkey),.NextRoundKey(keyexpansion_));
 
-  SubBytes subbytes (.in(subbytesINPUT), .out(subbytesOUTPUT));
-  ShiftRows shiftrows(.in(shiftrowsINPUT),.out(shiftrowsOUTPUT));
-  MixColumns MixColumns(.in(mixcolumnsINPUT),.out(mixcolumnsOUTPUT));
-  AddRoundKey addroundkey(.in(addroundkeyINPUT),.state(state),.out(addroundkeyOUT));
-
+  //Mux that goes into addroundkey
   always@(*) begin
     case(round)
-      0: addroundkeyINPUT = plain_text;
-      10: addroundkeyINPUT = shiftrowsOUTPUT;
-      default: addroundkeyINPUT = mixcolumnsOUTPUT;
-    endcase   
+      0: addroundkeyIN = state;
+      10: addroundkeyIN = shiftrows_;
+      default: addroundkeyIN = mixcolumns_; 
+    endcase
   end
 
+  //Manage rounds
   always@(posedge clk or negedge rstn) begin
     if(!rstn) begin
-      round <= 4'b0;
-      state <= 128'b0;
+      state <= {NB{1'b0}};
+      roundkey <= {NB{1'b0}};
+      round <= {4{1'b0}};
+      done <= 1;
     end
-    else begin
-      case(round)
-        0: begin
-          state <= key;
-          round <= round + 1;
+    else 
+      if(!done) begin // continue cipher
+        if(round == 10) begin // check done
+          done <= 1'b1;
         end
-        10:
-        default: begin
-          state <= addroundkeyOUT;
-          round <= round + 1;
+        round <= round + 1;
+        state <= addroundkey_;
+        roundkey <= keyexpansion_;
+      end
+
+      else //no cipher is on going 
+        if(start) begin //start new cipher
+          done <= 1'b0;
+          roundkey <= key;
+          state <= plain_text;
+        end 
+        else begin // do nothing
+          state <= {NB{1'b0}};
+          roundkey <= {NB{1'b0}};
+          round <= {4{1'b0}};
+          done <= 1;
         end
-      endcase
-    end
   end
+  
 
 endmodule
