@@ -1,4 +1,4 @@
-module SubBytes #(parameter numbytes = 16) (input [(8*numbytes - 1):0] in, output reg [(8*numbytes-1):0] out);
+module SubBytes #(parameter numbytes = 5'd16) (input [(8*numbytes - 1):0] in, output reg [(8*numbytes-1):0] out);
     integer i;
     reg [7:0] address;
     always@(*) begin
