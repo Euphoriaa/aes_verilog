@@ -1,3 +1,6 @@
+//David Peled 208576025
+//Tal Levy 209005305
+
 `timescale 1ns/100ps
 
 `include "aes_cipher.v"
@@ -10,6 +13,7 @@ module aes_cipher_tb;
     wire done;
     aes_cipher AES (.clk(clk),.rstn(rstn),.plain_text(plain_text),
                     .key(key),.cipher_text(cipher_text),.start(start),.done(done));
+    integer i;
     initial begin
         $dumpfile("aes_cipher_tb.vcp");
         $dumpvars;
@@ -18,8 +22,7 @@ module aes_cipher_tb;
         start = 1;
         #0.1
         rstn = 1;
-        plain_text = 128'h00112233445566778899aabbccddeeff;
-        key = 128'h000102030405060708090a0b0c0d0e0f;
+        
         #1 start = 0;
         #30
         $finish;

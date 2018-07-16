@@ -6,7 +6,7 @@
 `include "ShiftRows.v"
 `include "MixColumns.v"
 `include "KeyExpansion.v"
-
+`include "FlipBytes.v"
 module aes_cipher #(parameter NB = 128, NC = 4, NK = 4, NR = 10, BYTE = 8, WORD = 32) 
                  (input clk, rstn, start, output reg done,
                   input [NB-1:0] plain_text, key,
@@ -55,16 +55,22 @@ module aes_cipher #(parameter NB = 128, NC = 4, NK = 4, NR = 10, BYTE = 8, WORD 
       else //no cipher is on going 
         if(start) begin //start new cipher
           done <= 1'b0;
-          roundkey <= key;
-          state <= plain_text;
+          roundkey <= key_flipped;
+          state <= plain_text_flipped;
         end 
         else begin // do nothing
-          state <= {NB{1'b0}};
           roundkey <= {NB{1'b0}};
           round <= {4{1'b0}};
           done <= 1;
         end
   end
   
+  wire [NB-1:0] plain_text_flipped;
+  wire [NB-1:0] key_flipped;
+
+  FlipBytes flipOUT (.in(state),.out(cipher_text));
+  FlipBytes flipPLAIN_TEXT (.in(plain_text),.out(plain_text_flipped));
+  FlipBytes flipKEY (.in(key),.out(key_flipped));
+
 
 endmodule
